@@ -16,7 +16,7 @@ public class CityRepository {
     private HibernateTemplate hibernateTemplate;
 
     public void save(City city){
-        hibernateTemplate.saveOrUpdate(city);
+        hibernateTemplate.save(city);
     }
 
     public List<City> list(){

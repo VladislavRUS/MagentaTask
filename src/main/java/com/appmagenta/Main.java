@@ -30,16 +30,22 @@ public class Main {
         samara.setLatitude(5.85);
         samara.setLongitude(5.66);
 
-
         City orenburg = new City();
         orenburg.setName("ORENBURG");
         orenburg.setLatitude(1.85);
         orenburg.setLongitude(9.36);
 
+        City volgograd = new City();
+        volgograd.setName("VOLGOGRAD");
+        volgograd.setLatitude(1.83);
+        volgograd.setLongitude(19.36);
+
         cityRepository.save(tlt);
         cityRepository.save(samara);
         cityRepository.save(orenburg);
+        cityRepository.save(volgograd);
 
+        cityRepository.list().forEach(city -> System.out.println(city.getName() + " " + city.getId()));
         samara = cityRepository.findByName("SAMARA");
         tlt = cityRepository.findByName("TLT");
 
@@ -49,12 +55,14 @@ public class Main {
         distance.setDistance(666677);
         distanceRepository.save(distance);
 
-        samara = cityRepository.findByName("SAMARA");
         orenburg = cityRepository.findByName("ORENBURG");
+        volgograd = cityRepository.findByName("VOLGOGRAD");
 
+        System.out.println(orenburg.getName() + " " + orenburg.getId());
+        System.out.println(volgograd.getName() + " " + volgograd.getId());
         Distance d = new Distance();
-        distance.setCityTo(samara);
-        distance.setCityFrom(orenburg);
+        distance.setCityTo(orenburg);
+        distance.setCityFrom(volgograd);
         distance.setDistance(4344);
         distanceRepository.save(d);
     }
