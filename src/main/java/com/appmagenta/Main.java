@@ -20,15 +20,6 @@ public class Main {
 
         CityRepository cityRepository = context.getBean(CityRepository.class);
         DistanceRepository distanceRepository = context.getBean(DistanceRepository.class);
-        City tlt = new City();
-        tlt.setName("TLT");
-        tlt.setLatitude(4.55);
-        tlt.setLongitude(5.66);
-
-        City samara = new City();
-        samara.setName("SAMARA");
-        samara.setLatitude(5.85);
-        samara.setLongitude(5.66);
 
         City orenburg = new City();
         orenburg.setName("ORENBURG");
@@ -39,31 +30,55 @@ public class Main {
         volgograd.setName("VOLGOGRAD");
         volgograd.setLatitude(1.83);
         volgograd.setLongitude(19.36);
+        cityRepository.save(orenburg);
+        cityRepository.save(volgograd);
+
+        orenburg = cityRepository.findByName("ORENBURG");
+        volgograd = cityRepository.findByName("VOLGOGRAD");
+
+        Distance d = new Distance();
+        d.setCityTo(orenburg);
+        d.setCityFrom(volgograd);
+        d.setDistance(4445);
+        distanceRepository.save(d);
+        /*
+        orenburg = cityRepository.findByName("ORENBURG");
+        volgograd = cityRepository.findByName("VOLGOGRAD");
+
+        System.out.println(orenburg.getName() + " " + orenburg.getId());
+        System.out.println(volgograd.getName() + " " + volgograd.getId());
+        Distance distance = new Distance();
+        distance.setCityTo(orenburg);
+        distance.setCityFrom(volgograd);
+        distance.setDistance(4344);
+        distanceRepository.save(distance);
+
+
+        City samara = new City();
+        samara.setName("SAMARA");
+        samara.setLatitude(5.85);
+        samara.setLongitude(5.66);
+
+        City tlt = new City();
+        tlt.setName("TLT");
+        tlt.setLatitude(4.55);
+        tlt.setLongitude(5.66);
 
         cityRepository.save(tlt);
         cityRepository.save(samara);
         cityRepository.save(orenburg);
         cityRepository.save(volgograd);
 
-        cityRepository.list().forEach(city -> System.out.println(city.getName() + " " + city.getId()));
         samara = cityRepository.findByName("SAMARA");
         tlt = cityRepository.findByName("TLT");
 
-        Distance distance = new Distance();
-        distance.setCityTo(samara);
-        distance.setCityFrom(tlt);
-        distance.setDistance(666677);
-        distanceRepository.save(distance);
 
-        orenburg = cityRepository.findByName("ORENBURG");
-        volgograd = cityRepository.findByName("VOLGOGRAD");
 
-        System.out.println(orenburg.getName() + " " + orenburg.getId());
-        System.out.println(volgograd.getName() + " " + volgograd.getId());
-        Distance d = new Distance();
-        distance.setCityTo(orenburg);
-        distance.setCityFrom(volgograd);
-        distance.setDistance(4344);
-        distanceRepository.save(d);
+        Distance d1 = new Distance();
+        d1.setCityTo(tlt);
+        d1.setCityFrom(orenburg);
+        d1.setDistance(44465655);
+        distanceRepository.save(d1);
+        */
     }
 }

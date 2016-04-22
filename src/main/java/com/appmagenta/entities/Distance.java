@@ -7,14 +7,16 @@ import javax.persistence.*;
 public class Distance {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "DISTANCE_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "CAR_ID")
     private City cityFrom;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "CAR_ID")
     private City cityTo;
 
     @Column(name = "DISTANCE")
