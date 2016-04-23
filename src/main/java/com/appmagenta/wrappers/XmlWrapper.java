@@ -1,4 +1,4 @@
-package com.appmagenta.entities;
+package com.appmagenta.wrappers;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

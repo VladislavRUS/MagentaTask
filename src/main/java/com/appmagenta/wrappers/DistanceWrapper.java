@@ -1,4 +1,6 @@
-package com.appmagenta.entities;
+package com.appmagenta.wrappers;
+
+import com.appmagenta.entities.Distance;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

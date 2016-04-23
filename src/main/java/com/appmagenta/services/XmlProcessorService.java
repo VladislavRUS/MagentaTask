@@ -2,7 +2,7 @@ package com.appmagenta.services;
 
 import com.appmagenta.entities.City;
 import com.appmagenta.entities.Distance;
-import com.appmagenta.entities.XmlWrapper;
+import com.appmagenta.wrappers.XmlWrapper;
 import com.appmagenta.repositories.CityRepository;
 import com.appmagenta.repositories.DistanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;

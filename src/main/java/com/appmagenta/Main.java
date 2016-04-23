@@ -1,22 +1,11 @@
 package com.appmagenta;
 
 import com.appmagenta.config.BeansConfiguration;
-import com.appmagenta.entities.City;
-import com.appmagenta.entities.Distance;
-import com.appmagenta.entities.XmlWrapper;
-import com.appmagenta.repositories.CityRepository;
-import com.appmagenta.repositories.DistanceRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.naming.*;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
