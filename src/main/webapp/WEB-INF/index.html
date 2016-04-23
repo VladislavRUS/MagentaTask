@@ -4,14 +4,40 @@
     <meta charset="UTF-8">
     <title>Welcome</title>
     <script src="/resources/js/angular.min.js"></script>
+    <script src="/resources/js/ui-bootstrap.js"></script>
+    <link href="/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body ng-app="myApp" ng-controller="myCtrl">
-    <input type="file" file-model="myFile">
-    <button ng-click="uploadFile()">Upload file</button>
+    <div class="row">
+        <div class="col-md-4">
+            <input type="file" file-model="myFile">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-sm btn-success" ng-click="uploadFile()">Upload file</button>
+        </div>
+        <div class="col-md-4">
+            <button ng-click="crowflight()">Crowflight</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <tr ng-repeat="d in distances">
+                    <td>{{d.cityFrom.name}}</td>
+                    <td>{{d.cityTo.name}}</td>
+                    <td>{{d.value}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
 </body>
 <script>
     var myApp = angular.module('myApp', []);
-
     myApp.directive('fileModel', ['$parse', function ($parse) {
         return {
             restrict: 'A',
@@ -27,26 +53,22 @@
             }
         };
     }]);
-
     myApp.service('fileUpload', ['$http', function ($http) {
         this.uploadFileToUrl = function(file, uploadUrl){
             var fd = new FormData();
             fd.append('file', file);
 
             $http.post(uploadUrl, fd, {
-                        transformRequest: angular.identity,
-                        headers: {'Content-Type': undefined}
-                    })
-
-                    .success(function(){
-                    })
-
-                    .error(function(){
-                    });
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function(){
+            })
+            .error(function(){
+            });
         }
     }]);
-
-    myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+    myApp.controller('myCtrl', ['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload){
         $scope.uploadFile = function(){
             var file = $scope.myFile;
 
@@ -56,6 +78,21 @@
             var uploadUrl = "/file_upload";
             fileUpload.uploadFileToUrl(file, uploadUrl);
         };
+        $scope.crowflight = function(){
+            $http.get('/distances/crowflight', {
+                params:{from:'Samara', to:'Volgograd'}
+            }).then(function(resp){
+                alert(JSON.stringify(resp.data));
+            }, function(resp){
+                alert(JSON.stringify(resp.data));
+            })
+        };
+        $http({
+            url:'/distances/',
+            method:'GET'
+        }).then(function(resp){
+            $scope.distances = resp.data;
+        })
     }]);
 </script>
 </html>

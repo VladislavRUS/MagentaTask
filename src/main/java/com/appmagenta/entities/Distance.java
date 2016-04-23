@@ -1,34 +1,38 @@
 package com.appmagenta.entities;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 
 @Entity
 @Table(name = "DISTANCES")
+@XmlType(propOrder = {"cityFrom", "cityTo", "value"}, name = "distance")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Distance {
 
     @Id
     @Column(name = "DISTANCE_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @XmlTransient
     private long id;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "CAR_ID")
+    @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "CITY_FROM", referencedColumnName = "CAR_ID")
     private City cityFrom;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "CAR_ID")
+    @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "CITY_TO", referencedColumnName = "CAR_ID")
     private City cityTo;
 
-    @Column(name = "DISTANCE")
-    private double distance;
+    @Column(name = "VALUE")
+    private double value;
 
-    public Distance() {
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public Distance(City cityFrom, double distance) {
-        this.cityFrom = cityFrom;
-        this.cityTo = cityTo;
-        this.distance = distance;
+    public long getId() {
+        return id;
     }
 
     public City getCityFrom() {
@@ -47,11 +51,16 @@ public class Distance {
         this.cityTo = cityTo;
     }
 
-    public double getDistance() {
-        return distance;
+    public double getValue() {
+        return value;
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
+    public void setValue(double distance) {
+        this.value = distance;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + this.id + " VALUE: " + value;
     }
 }

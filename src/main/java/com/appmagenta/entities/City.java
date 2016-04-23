@@ -1,17 +1,22 @@
 package com.appmagenta.entities;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 
 @Entity
 @Table(name = "CITIES")
+@XmlType(propOrder = {"name", "latitude", "longitude"}, name = "city")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class City {
 
     @Id
     @Column(name = "CAR_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlTransient
     private long id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique = true)
     private String name;
 
     @Column(name = "LATITUDE")
@@ -20,17 +25,12 @@ public class City {
     @Column(name = "LONGITUDE")
     private double longitude;
 
-    public City() {
-    }
-
-    public City(String name, double latitude, double longitude){
-        this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -55,5 +55,10 @@ public class City {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String toString(){
+        return "ID: " + this.id + " NAME: " + this.name + " LATITUDE: " + this.latitude + " LONGITUDE: " + this.longitude;
     }
 }

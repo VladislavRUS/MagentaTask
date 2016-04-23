@@ -28,6 +28,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories("com.appmagenta.repositories")
 @PropertySource("classpath:jdbc.properties")
+@ComponentScan(basePackages = {"com.appmagenta.services"})
 public class BeansConfiguration {
 
     @Autowired
