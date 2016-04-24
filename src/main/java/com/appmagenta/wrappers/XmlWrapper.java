@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "data")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlWrapper {
+
     @XmlElement(name = "cities")
     private CityWrapper cityWrapper;
 

@@ -3,41 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
-    <script src="/resources/js/angular.min.js"></script>
-    <script src="/resources/js/ui-bootstrap.js"></script>
+    <script src="/resources/js/libs/angular.min.js"></script>
+    <script src="/resources/js/libs/angular-route.js"></script>
+    <script src="/resources/js/libs/ui-bootstrap.js"></script>
+    <script src="/resources/js/page_controllers/citiesController.js"></script>
+    <script src="/resources/js/page_controllers/crowflightController.js"></script>
+    <script src="/resources/js/page_controllers/matrixController.js"></script>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body ng-app="myApp" ng-controller="myCtrl">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">XML Processing</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="#/cities">Cities</a></li>
+                <li><a href="#/crowflight">Crow flight distances</a></li>
+                <li><a href="#/matrix">Matrix distances</a></li>
+            </ul>
+        </div>
+    </nav>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-1">
             <input type="file" file-model="myFile">
         </div>
-        <div class="col-md-4">
-            <button class="btn btn-sm btn-success" ng-click="uploadFile()">Upload file</button>
-        </div>
-        <div class="col-md-4">
-            <button ng-click="crowflight()">Crowflight</button>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn btn-primary btn-success" ng-click="uploadFile()">Upload file</button>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-6">
-            <table class="table table-striped">
-                <tr ng-repeat="d in distances">
-                    <td>{{d.cityFrom.name}}</td>
-                    <td>{{d.cityTo.name}}</td>
-                    <td>{{d.value}}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-md-3">
-        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-8"><ng-view></ng-view></div>
+        <div class="col-md-2"></div>
     </div>
 </body>
 <script>
-    var myApp = angular.module('myApp', []);
+    var myApp = angular.module('myApp', ['ngRoute', 'cities', 'crowflight', 'matrix']).config(function($routeProvider){
+        $routeProvider.when("/cities", {
+            templateUrl:'/partials/cities.html',
+            controller:'citiesController'
+        })
+        .when("/crowflight", {
+            templateUrl:'/partials/crowflight.html',
+            controller:'crowflightController'
+        })
+        .when("/matrix", {
+            templateUrl:'/partials/matrix.html',
+            controller:'matrixController'
+        })
+        .otherwise({
+            redirectTo:'/cities'
+        });
+    });
     myApp.directive('fileModel', ['$parse', function ($parse) {
         return {
             restrict: 'A',
@@ -53,7 +75,7 @@
             }
         };
     }]);
-    myApp.service('fileUpload', ['$http', function ($http) {
+    myApp.service('fileUpload', ['$http', function ($http, $location) {
         this.uploadFileToUrl = function(file, uploadUrl){
             var fd = new FormData();
             fd.append('file', file);
@@ -63,8 +85,10 @@
                 headers: {'Content-Type': undefined}
             })
             .success(function(){
+                alert("File was successfully processed!");
             })
             .error(function(){
+                alert("Oops! Some errors occured =(");
             });
         }
     }]);
@@ -75,24 +99,9 @@
             console.log('file is ' );
             console.dir(file);
 
-            var uploadUrl = "/file_upload";
+            var uploadUrl = "/file_upload/";
             fileUpload.uploadFileToUrl(file, uploadUrl);
         };
-        $scope.crowflight = function(){
-            $http.get('/distances/crowflight', {
-                params:{from:'Samara', to:'Volgograd'}
-            }).then(function(resp){
-                alert(JSON.stringify(resp.data));
-            }, function(resp){
-                alert(JSON.stringify(resp.data));
-            })
-        };
-        $http({
-            url:'/distances/',
-            method:'GET'
-        }).then(function(resp){
-            $scope.distances = resp.data;
-        })
     }]);
 </script>
 </html>

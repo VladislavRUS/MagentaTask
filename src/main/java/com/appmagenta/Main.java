@@ -10,10 +10,14 @@ import javax.xml.bind.JAXBException;
 public class Main {
 
     public static void main(String[] args) throws NamingException, JAXBException {
+
+        double cos = Math.sin(Math.toRadians(53.11))*Math.sin(Math.toRadians(53.11)) + Math.cos(Math.toRadians(53.11))*Math.cos(Math.toRadians(53.11))*Math.cos(Math.abs(Math.toRadians(50.07)-Math.toRadians(49.25)));
+        System.out.println(Math.acos(cos)*6371);
+        /*
         ApplicationContext context = new AnnotationConfigApplicationContext(BeansConfiguration.class);
         for (String name : context.getBeanDefinitionNames()) {
             System.out.println(name);
-        }
+        }*/
 /*
         CityRepository cityRepository = context.getBean(CityRepository.class);
         DistanceRepository distanceRepository = context.getBean(DistanceRepository.class);

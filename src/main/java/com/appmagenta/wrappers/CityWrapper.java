@@ -11,6 +11,7 @@ import java.util.List;
 @XmlRootElement(name = "cities")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CityWrapper {
+
     @XmlElement(name = "city")
     private List<City> cityList;
 

@@ -17,11 +17,11 @@ public class Distance {
     private long id;
 
     @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "CITY_FROM", referencedColumnName = "CAR_ID")
+    @JoinColumn(name = "CITY_FROM", referencedColumnName = "CITY_ID")
     private City cityFrom;
 
     @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "CITY_TO", referencedColumnName = "CAR_ID")
+    @JoinColumn(name = "CITY_TO", referencedColumnName = "CITY_ID")
     private City cityTo;
 
     @Column(name = "VALUE")

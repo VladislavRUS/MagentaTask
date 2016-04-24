@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.*;
 public class City {
 
     @Id
-    @Column(name = "CAR_ID")
+    @Column(name = "CITY_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlTransient
     private long id;

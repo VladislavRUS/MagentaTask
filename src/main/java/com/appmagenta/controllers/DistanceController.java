@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,18 +32,9 @@ public class DistanceController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/crowflight", method = RequestMethod.GET)
-    public ResponseEntity<Distance> crowFlight(@RequestParam(value = "from") String cityFrom,
-                                               @RequestParam(value = "to") String cityTo){
-        Distance distance = distanceService.crowFlightDistanceBetweenTwoCities(cityFrom, cityTo);
-        return new ResponseEntity<>(distance, HttpStatus.OK);
-    }
-
-
-    @RequestMapping(value = "/matrix", method = RequestMethod.GET)
-    public ResponseEntity<Distance> matrix(@RequestParam(value = "from") String cityFrom,
-                                           @RequestParam(value = "to") String cityTo){
-        Distance distance = distanceService.matrixDistanceBetweenTwoCities(cityFrom, cityTo);
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Distance> getById(@PathVariable(value = "id") int id){
+        Distance distance = distanceRepository.findById(id);
         return new ResponseEntity<>(distance, HttpStatus.OK);
     }
 }

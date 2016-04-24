@@ -11,6 +11,7 @@ import java.util.List;
 @XmlRootElement(name = "distances")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DistanceWrapper {
+
     @XmlElement(name = "distance")
     private List<Distance> distanceList;
 

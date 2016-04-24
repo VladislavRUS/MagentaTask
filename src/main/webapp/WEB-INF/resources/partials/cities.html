@@ -1,0 +1,12 @@
+<div ng-conrtoller="citiesController">
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+        </tr>
+        <tr ng-repeat="city in cities">
+            <td>{{city.id}}</td>
+            <td>{{city.name}}</td>
+        </tr>
+    </table>
+</div>

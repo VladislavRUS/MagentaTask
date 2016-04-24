@@ -1,0 +1,14 @@
+<div ng-controller="crowflightController">
+    <table class="table table-striped">
+        <tr>
+            <th>FROM</th>
+            <th>TO</th>
+            <th>DISTANCE</th>
+        </tr>
+        <tr ng-repeat="d in distances">
+            <td>{{d.cityFrom.name}}</td>
+            <td>{{d.cityTo.name}}</td>
+            <td>{{d.value}}</td>
+        </tr>
+    </table>
+</div>
