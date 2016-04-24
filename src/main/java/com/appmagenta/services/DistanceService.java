@@ -60,6 +60,11 @@ public class DistanceService {
         List<Distance> path = new ArrayList<>();
         List<City> used = new ArrayList<>();
         try {
+            if (!cityRepository.isInTheDistanceTable(cityFrom.getId())) {
+                throw new RuntimeException(cityFrom.getName());
+            } else if (!cityRepository.isInTheDistanceTable(cityTo.getId())) {
+                throw new RuntimeException(cityTo.getName());
+            }
             matrixDistanceBetweenTwoCities(cityFrom, cityTo, path, used);
         }catch (Exception e){
             logger.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -69,12 +74,6 @@ public class DistanceService {
     }
 
     private void matrixDistanceBetweenTwoCities(City cityFrom, City cityTo, List<Distance> path, List<City> used){
-        if (!cityRepository.isInTheDistanceTable(cityFrom.getId())) {
-            throw new RuntimeException(cityFrom.getName());
-        } else if (!cityRepository.isInTheDistanceTable(cityTo.getId())) {
-            throw new RuntimeException(cityTo.getName());
-        }
-        path.forEach(logger::debug);
         used.add(cityFrom);
         if(distanceRepository.existsByFromAndTo(cityFrom.getId(), cityTo.getId())){
             used.add(cityTo);
@@ -101,11 +100,13 @@ public class DistanceService {
                 if (!cities.get(i).getName().equals(cities.get(j).getName())) {
                     final City cityTo = cities.get(j);
                     List<Distance> path = traverse(cities.get(i), cityTo);
-                    Distance result = new Distance();
-                    result.setCityFrom(cities.get(i));
-                    result.setCityTo(cities.get(j));
-                    path.forEach(distance -> result.setValue(result.getValue() + distance.getValue()));
-                    distances.add(result);
+                    if(path.size() > 0){
+                        Distance result = new Distance();
+                        result.setCityFrom(cities.get(i));
+                        result.setCityTo(cities.get(j));
+                        path.forEach(distance -> result.setValue(result.getValue() + distance.getValue()));
+                        distances.add(result);
+                    }
                 }
             }
         }
