@@ -2,9 +2,9 @@ package com.appmagenta.services;
 
 import com.appmagenta.entities.City;
 import com.appmagenta.entities.Distance;
-import com.appmagenta.wrappers.XmlWrapper;
 import com.appmagenta.repositories.CityRepository;
 import com.appmagenta.repositories.DistanceRepository;
+import com.appmagenta.wrappers.XmlWrapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,9 +56,8 @@ public class XmlProcessorService {
                 }
             }
             //If database already contains cities then we need to check xml and cityNames from db
-            else{
-                if(!cityMap.containsKey(cityFromName) || !cityMap.containsKey(cityToName)
-                        || !cityNames.contains(cityFromName) || !cityNames.contains(cityToName)){
+            else if (!cityMap.containsKey(cityFromName) || !cityMap.containsKey(cityToName)){
+                if(!cityNames.contains(cityFromName) || !cityNames.contains(cityToName)){
                     throw new RuntimeException("City in distances is not present in cities");
                 }
             }

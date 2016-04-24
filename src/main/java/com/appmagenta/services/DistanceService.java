@@ -56,28 +56,57 @@ public class DistanceService {
         return distance;
     }
 
-    public Distance matrixDistanceBetweenTwoCities(City cityFrom, City cityTo){
-        List<City> adjacentCities = cityRepository.findAdjacencyCities(cityFrom.getId());
-        Distance distance = new Distance();
-        distance.setCityFrom(cityFrom);
-        distance.setCityTo(cityTo);
-        distance.setValue(0.0);
-        adjacentCities.forEach(city -> {
-            if(city.getName().equals(cityTo.getName())){
-                distance.setValue(distanceRepository.findByCities(cityFrom.getId(), city.getId()).getValue());
-            }
-        });
-        return distance;
+    public List<Distance> traverse(City cityFrom, City cityTo) {
+        List<Distance> path = new ArrayList<>();
+        List<City> used = new ArrayList<>();
+        try {
+            matrixDistanceBetweenTwoCities(cityFrom, cityTo, path, used);
+        }catch (Exception e){
+            logger.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            logger.debug("CITY: " + e.getMessage() + " IS NOT IN THE DISTANCE TABLE");
+        }
+        return path;
     }
 
-    public List<Distance> matrixDistancesCities() {
+    private void matrixDistanceBetweenTwoCities(City cityFrom, City cityTo, List<Distance> path, List<City> used){
+        if (!cityRepository.isInTheDistanceTable(cityFrom.getId())) {
+            throw new RuntimeException(cityFrom.getName());
+        } else if (!cityRepository.isInTheDistanceTable(cityTo.getId())) {
+            throw new RuntimeException(cityTo.getName());
+        }
+        path.forEach(logger::debug);
+        used.add(cityFrom);
+        if(distanceRepository.existsByFromAndTo(cityFrom.getId(), cityTo.getId())){
+            used.add(cityTo);
+            path.add(distanceRepository.findByCities(cityFrom.getId(), cityTo.getId()));
+            return;
+        }
+        List<City> adjacentCities = cityRepository.findAdjacencyCities(cityFrom.getId());
+        for (City adjacentCity : adjacentCities) {
+            if (!used.contains(adjacentCity) && !used.contains(cityTo)) {
+                path.add(distanceRepository.findByCities(cityFrom.getId(), adjacentCity.getId()));
+                matrixDistanceBetweenTwoCities(adjacentCity, cityTo, path, used);
+            }
+        }
+    }
+
+    public List<Distance> matrixDistancesBetweenCities() {
         List<City> cities = new ArrayList<>();
         cityRepository.findAll().forEach(cities::add);
         List<Distance> distances = new ArrayList<>();
         int size = cities.size();
+
         for(int i = 0; i < size; i++){
             for(int j = i; j < size; j++){
-                distances.add(matrixDistanceBetweenTwoCities(cities.get(i), cities.get(j)));
+                if (!cities.get(i).getName().equals(cities.get(j).getName())) {
+                    final City cityTo = cities.get(j);
+                    List<Distance> path = traverse(cities.get(i), cityTo);
+                    Distance result = new Distance();
+                    result.setCityFrom(cities.get(i));
+                    result.setCityTo(cities.get(j));
+                    path.forEach(distance -> result.setValue(result.getValue() + distance.getValue()));
+                    distances.add(result);
+                }
             }
         }
         return distances;

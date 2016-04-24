@@ -1,5 +1,7 @@
 package com.appmagenta.entities;
 
+import org.hibernate.annotations.Index;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
@@ -14,6 +16,7 @@ public class City {
     @Column(name = "CITY_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlTransient
+    @Index(name = "CITY_ID_INDEX")
     private long id;
 
     @Column(name = "NAME", unique = true)
@@ -60,5 +63,32 @@ public class City {
     @Override
     public String toString(){
         return "ID: " + this.id + " NAME: " + this.name + " LATITUDE: " + this.latitude + " LONGITUDE: " + this.longitude;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null){
+            return false;
+        }
+        if(!(obj instanceof City)){
+            return false;
+        }
+        City another = (City)obj;
+        return this.name.equals(another.name) && this.latitude == another.latitude && this.longitude == another.longitude;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        long latBits = Double.doubleToLongBits(latitude);
+        long longBits = Double.doubleToLongBits(longitude);
+        int intLatBits = (int)(latBits ^ (latBits >>> 32));
+        int intLongBits = (int)(longBits ^ (longBits >>> 32));
+        result += intLatBits;
+        result += intLongBits;
+        for(int i = 0; i < name.length(); i++){
+            result += (int)name.charAt(i);
+        }
+        return result;
     }
 }
