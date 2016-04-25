@@ -4,7 +4,7 @@
 
 Application allows you to manage entities.
 
-First you need to load an xml file, that contains cities and distances between them.
+First you need to load an xml file (to test you can use the one in docs folder), that contains cities and distances between them.
 
 You can watch:
 
