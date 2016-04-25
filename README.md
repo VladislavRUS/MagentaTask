@@ -16,7 +16,7 @@ You can watch:
 
 You can run this program using maven:
 
-**`maven jetty:run`**
+**`mvn jetty:run`**
 
 Application will start on port **8770**
 
