@@ -55,7 +55,7 @@ public class DistanceService {
         return distance;
     }
 
-    public List<Distance> traverse(City cityFrom, City cityTo) {
+    public List<Distance> matrixDistanceBetweenTwoCities(City cityFrom, City cityTo) {
         List<Distance> path = new ArrayList<>();
         List<City> used = new ArrayList<>();
         try {
@@ -64,7 +64,7 @@ public class DistanceService {
             } else if (!cityRepository.isInTheDistanceTable(cityTo.getId())) {
                 throw new RuntimeException(cityTo.getName());
             }
-            matrixDistanceBetweenTwoCities(cityFrom, cityTo, path, used);
+            traverse(cityFrom, cityTo, path, used);
         }catch (Exception e){
             logger.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             logger.debug("CITY: " + e.getMessage() + " IS NOT IN THE DISTANCE TABLE");
@@ -72,7 +72,8 @@ public class DistanceService {
         return path;
     }
 
-    private void matrixDistanceBetweenTwoCities(City cityFrom, City cityTo, List<Distance> path, List<City> used){
+    //Recursive depth-first-search
+    private void traverse(City cityFrom, City cityTo, List<Distance> path, List<City> used){
         used.add(cityFrom);
         if(distanceRepository.existsByFromAndTo(cityFrom.getId(), cityTo.getId())){
             used.add(cityTo);
@@ -83,7 +84,7 @@ public class DistanceService {
         for (City adjacentCity : adjacentCities) {
             if (!used.contains(adjacentCity) && !used.contains(cityTo)) {
                 path.add(distanceRepository.findByCities(cityFrom.getId(), adjacentCity.getId()));
-                matrixDistanceBetweenTwoCities(adjacentCity, cityTo, path, used);
+                traverse(adjacentCity, cityTo, path, used);
             }
         }
     }
@@ -93,12 +94,11 @@ public class DistanceService {
         cityRepository.findAll().forEach(cities::add);
         List<Distance> distances = new ArrayList<>();
         int size = cities.size();
-
         for(int i = 0; i < size; i++){
             for(int j = i; j < size; j++){
                 if (!cities.get(i).getName().equals(cities.get(j).getName())) {
                     final City cityTo = cities.get(j);
-                    List<Distance> path = traverse(cities.get(i), cityTo);
+                    List<Distance> path = matrixDistanceBetweenTwoCities(cities.get(i), cityTo);
                     if(path.size() > 0){
                         Distance result = new Distance();
                         result.setCityFrom(cities.get(i));

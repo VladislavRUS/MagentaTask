@@ -34,7 +34,7 @@ public class MatrixDistanceController {
     public ResponseEntity<List<City>> betweenTwo(@PathVariable(value = "first") long firstID, @PathVariable(value = "second") long secondID){
         City from = cityRepository.findById(firstID);
         City to = cityRepository.findById(secondID);
-        List<Distance> list = distanceService.traverse(from, to);
+        List<Distance> list = distanceService.matrixDistanceBetweenTwoCities(from, to);
         List<City> cities = new ArrayList<>();
         cities.add(from);
         City previous = from;
