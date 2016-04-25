@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,10 +31,23 @@ public class MatrixDistanceController {
         return new ResponseEntity<>(distances, HttpStatus.OK);
     }
     @RequestMapping(value = "/{first}&{second}", method = RequestMethod.GET)
-    public ResponseEntity<List<Distance>> betweenTwo(@PathVariable(value = "first") long firstID, @PathVariable(value = "second") long secondID){
+    public ResponseEntity<List<City>> betweenTwo(@PathVariable(value = "first") long firstID, @PathVariable(value = "second") long secondID){
         City from = cityRepository.findById(firstID);
         City to = cityRepository.findById(secondID);
         List<Distance> list = distanceService.traverse(from, to);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        List<City> cities = new ArrayList<>();
+        cities.add(from);
+        City previous = from;
+        for(Distance distance: list){
+            if(!distance.getCityFrom().getName().equals(previous.getName()) && !cities.contains(distance.getCityFrom())){
+                cities.add(distance.getCityFrom());
+                previous = distance.getCityFrom();
+            }
+            else{
+                cities.add(distance.getCityTo());
+                previous = distance.getCityTo();
+            }
+        }
+        return new ResponseEntity<>(cities, HttpStatus.OK);
     }
 }

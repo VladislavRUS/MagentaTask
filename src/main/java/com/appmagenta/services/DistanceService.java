@@ -41,7 +41,6 @@ public class DistanceService {
     }
 
     private Distance crowFlightDistanceBetweenTwoCities(City cityFrom, City cityTo){
-
         double latitudeFrom = Math.toRadians(cityFrom.getLatitude());
         double longitudeFrom = Math.toRadians(cityFrom.getLongitude());
         double latitudeTo = Math.toRadians(cityTo.getLatitude());

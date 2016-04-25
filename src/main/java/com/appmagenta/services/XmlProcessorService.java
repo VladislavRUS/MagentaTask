@@ -9,10 +9,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +35,16 @@ public class XmlProcessorService {
     @Autowired
     private CityRepository cityRepository;
 
-    public void processFile(MultipartFile file) throws JAXBException, IOException {
+    public void processFile(MultipartFile file) throws JAXBException, IOException, SAXException {
         JAXBContext jaxbContext = JAXBContext.newInstance(XmlWrapper.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        ClassLoader classLoader = getClass().getClassLoader();
+        File xmlSchema = new File(classLoader.getResource("schema/data_scheme.xml").getFile());
+        Schema schema = schemaFactory.newSchema(xmlSchema);
+        unmarshaller.setSchema(schema);
         XmlWrapper wrapper = (XmlWrapper) unmarshaller.unmarshal(file.getInputStream());
-        //Make a map CityName / City
+        //Make a map cityName <-> City
         Map<String, City> cityMap = wrapper.getCityWrapper()
                 .getCityList().stream()
                 .collect(Collectors.toMap(City::getName, city->city));
@@ -45,6 +55,7 @@ public class XmlProcessorService {
         cityRepository.findAll().forEach(city -> cityNames.add(city.getName()));
 
         //First we make normal distances
+        //because in xml are only names and value
         distanceList.forEach(distance -> {
             String cityFromName = distance.getCityFrom().getName();
             String cityToName = distance.getCityTo().getName();

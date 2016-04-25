@@ -1,14 +1,33 @@
 <div ng-controller="matrixController">
+    <h2><i>Press any row to watch the path...</i></h2>
     <table class="table table-striped">
         <tr>
             <th>FROM</th>
             <th>TO</th>
             <th>DISTANCE</th>
         </tr>
-        <tr ng-repeat="d in distances">
+        <tr ng-repeat="d in distances" ng-click="between(d.cityFrom.id, d.cityTo.id)">
             <td>{{d.cityFrom.name}}</td>
             <td>{{d.cityTo.name}}</td>
             <td>{{d.value}}</td>
         </tr>
     </table>
+    <script type="text/ng-template" id="pathBetweenTwoCities.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Path between two cities</h3>
+        </div>
+        <div class="modal-body">
+            <div>
+                <h3><i>
+                    <span>{{from.name}}</span>
+                    <span ng-repeat="p in path">{{p.name}}-></span>
+                    <span>{{to.name}}</span>
+                    </i>
+                </h3>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" type="button" ng-click="close()">Close</button>
+        </div>
+    </script>
 </div>

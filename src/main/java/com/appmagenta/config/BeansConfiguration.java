@@ -21,7 +21,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("com.appmagenta.repositories")
-@PropertySource("classpath:jdbc.properties")
+@PropertySource(value = {"classpath:jdbc.properties", "classpath:hibernate.properties"})
 @ComponentScan(basePackages = {"com.appmagenta.services"})
 public class BeansConfiguration {
 
@@ -60,10 +60,10 @@ public class BeansConfiguration {
     @Bean
     public Properties hibernateProperties(){
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        properties.put("hibernate.hbm2ddl.auto", "create");
-        properties.put("hibernate.format_sql", "true");
-        properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+        properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
+        properties.put("hibernate.format_sql", environment.getProperty("hibernate.format_sql"));
+        properties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
         return properties;
     }
 

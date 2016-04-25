@@ -9,6 +9,8 @@
     <script src="/resources/js/page_controllers/citiesController.js"></script>
     <script src="/resources/js/page_controllers/crowflightController.js"></script>
     <script src="/resources/js/page_controllers/matrixController.js"></script>
+    <script src="/resources/js/libs/arbor.js"></script>
+    <script src="/resources/js/page_controllers/graphController.js"></script>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body ng-app="myApp" ng-controller="myCtrl">
@@ -43,7 +45,7 @@
     </div>
 </body>
 <script>
-    var myApp = angular.module('myApp', ['ngRoute', 'cities', 'crowflight', 'matrix']).config(function($routeProvider){
+    var myApp = angular.module('myApp', ['ngRoute', 'cities', 'crowflight', 'matrix', 'ui.bootstrap']).config(function($routeProvider){
         $routeProvider.when("/cities", {
             templateUrl:'/partials/cities.html',
             controller:'citiesController'
